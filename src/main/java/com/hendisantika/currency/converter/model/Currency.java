@@ -1,5 +1,6 @@
 package com.hendisantika.currency.converter.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -7,12 +8,16 @@ import java.util.Date;
  */
 public class Currency {
     String base;
-    Date date;
+    String date;
     Rates rates;
+
+    public Currency() {
+    }
 
     public Currency(String base, Date date, Rates rates) {
         this.base = base;
-        this.date = date;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        this.date = sdf.format(date);
         this.rates = rates;
     }
 
@@ -24,11 +29,11 @@ public class Currency {
         this.base = base;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -38,5 +43,14 @@ public class Currency {
 
     public void setRates(Rates rates) {
         this.rates = rates;
+    }
+
+    @Override
+    public String toString() {
+        return "Currency{" +
+                "base='" + base + '\'' +
+                ", date=" + date +
+                ", rates=" + rates +
+                '}';
     }
 }

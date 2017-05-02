@@ -1,17 +1,37 @@
 package com.hendisantika.currency.converter;
 
 import com.hendisantika.currency.converter.model.Currency;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class CurrencyConverterDemoApplication {
 
+	private static final Logger log = LoggerFactory.getLogger(CurrencyConverterDemoApplication.class);
+
+
 	public static void main(String[] args) {
 		SpringApplication.run(CurrencyConverterDemoApplication.class, args);
-		getCurrency();
+	}
 
+	@Bean
+	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+		return builder.build();
+	}
+
+	@Bean
+	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
+		return args -> {
+			Currency currency = restTemplate.getForObject(
+					"http://api.fixer.io/latest", Currency.class);
+			log.info(currency.toString());
+		};
 	}
 
 	public static Currency getCurrency(){
@@ -19,7 +39,7 @@ public class CurrencyConverterDemoApplication {
 		Currency currency = restTemplate.getForObject("http://api.fixer.io/latest?base={from}&symbols={to}", Currency.class, 200);
 		System.out.println("Base: " + currency.getBase());
 		System.out.println("Date: " + currency.getDate());
-		System.out.println("Rates: " + currency.getRates());
+		System.out.println("Rates2: " + currency.getRates());
 
 		return currency;
 	}
